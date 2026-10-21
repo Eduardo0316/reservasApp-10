@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{ editando ? 'Editar habitación' : 'Nueva habitación' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <mat-dialog-content>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Número</mat-label>
+        <input matInput type="number" formControlName="numero" min="1" step="1">
+        <mat-error>{{ err('numero') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="idTipo">
+          @for (t of tipos; track t.codigo) {
+            <mat-option [value]="t.codigo">{{ t.etiqueta }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ err('idTipo') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Precio por noche</mat-label>
+        <input matInput type="number" formControlName="precio" min="0" step="0.01">
+        <span matTextPrefix>$&nbsp;</span>
+        <mat-error>{{ err('precio') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacidad (personas)</mat-label>
+        <input matInput type="number" formControlName="capacidad" min="1" step="1">
+        <mat-error>{{ err('capacidad') }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    @if (editando) {
+      <p class="aviso-info">El estado no se modifica aquí; usa la acción «Cambiar estado» del listado.</p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close [disabled]="guardando">Cancelar</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="guardando">
+      {{ guardando ? 'Guardando…' : 'Guardar' }}
+    </button>
+  </mat-dialog-actions>
+</form>
