@@ -1,0 +1,97 @@
+<div class="pagina">
+  <div class="encabezado">
+    <div>
+      <h1 class="titulo-pagina">Reservas</h1>
+      <p class="subtitulo">Alta, modificación y ciclo de vida de las reservas</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="abrirFormulario()">
+      <mat-icon>event_available</mat-icon> Nueva reserva
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline" class="buscador">
+    <mat-label>Buscar</mat-label>
+    <input matInput placeholder="Huésped, habitación, estado…" (input)="filtrar($any($event.target).value)">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  @if (cargando) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="tabla-contenedor mat-elevation-z1">
+    <table mat-table [dataSource]="datos">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let r">{{ r.id }}</td>
+      </ng-container>
+      <ng-container matColumnDef="huesped">
+        <th mat-header-cell *matHeaderCellDef>Huésped</th>
+        <td mat-cell *matCellDef="let r">
+          {{ r.huesped?.nombre }}
+          <div class="secundario">{{ r.huesped?.email }}</div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="habitacion">
+        <th mat-header-cell *matHeaderCellDef>Habitación</th>
+        <td mat-cell *matCellDef="let r">
+          {{ r.habitacion?.numero }}
+          <div class="secundario">{{ r.tipoHabitacion }}</div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="fechas">
+        <th mat-header-cell *matHeaderCellDef>Estancia</th>
+        <td mat-cell *matCellDef="let r">{{ r.fechaEntrada }} → {{ r.fechaSalida }}</td>
+      </ng-container>
+      <ng-container matColumnDef="personas">
+        <th mat-header-cell *matHeaderCellDef>Personas</th>
+        <td mat-cell *matCellDef="let r">{{ r.numeroPersonas }}</td>
+      </ng-container>
+      <ng-container matColumnDef="precioNoche">
+        <th mat-header-cell *matHeaderCellDef>Por noche</th>
+        <td mat-cell *matCellDef="let r">{{ r.precioNoche | currency:'MXN':'symbol-narrow' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="precioTotal">
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let r"><strong>{{ r.precioTotal | currency:'MXN':'symbol-narrow' }}</strong></td>
+      </ng-container>
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let r">
+          <span class="chip" [ngClass]="'chip-' + (r.estadoClave ?? 'DESCONOCIDO')">{{ r.estadoEtiqueta }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+        <td mat-cell *matCellDef="let r" class="col-acciones">
+          <!-- Cada acción solo se habilita en el estado en que es válida -->
+          <button mat-icon-button matTooltip="Check-in" [disabled]="!r.acciones.checkIn" (click)="checkIn(r)">
+            <mat-icon>login</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Check-out" [disabled]="!r.acciones.checkOut" (click)="checkOut(r)">
+            <mat-icon>logout</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Cancelar" [disabled]="!r.acciones.cancelar" (click)="cancelar(r)">
+            <mat-icon>event_busy</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Editar fechas" [disabled]="!r.acciones.editar" (click)="abrirFormulario(r)">
+            <mat-icon>edit_calendar</mat-icon>
+          </button>
+          @if (permisos.esAdmin) {
+            <button mat-icon-button color="warn" matTooltip="Eliminar" [disabled]="!r.acciones.eliminar" (click)="eliminar(r)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="sin-datos" [attr.colspan]="columnas.length">
+          {{ cargando ? 'Cargando…' : 'No hay reservas para mostrar' }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
