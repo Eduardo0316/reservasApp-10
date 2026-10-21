@@ -1,0 +1,42 @@
+<div class="pagina">
+  <div class="encabezado">
+    <div>
+      <h1 class="titulo-pagina">Reportes</h1>
+      <p class="subtitulo">Información completa, incluidas las reservas eliminadas</p>
+    </div>
+  </div>
+
+  <mat-tab-group animationDuration="150ms">
+    <mat-tab label="Histórico">
+      @if (cargandoHistorico) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
+      <div class="contenido-tab">
+        <p class="subtitulo">{{ historico.length }} reservas en total, sin importar su estado.</p>
+        @if (!cargandoHistorico && historico.length && !distingueEliminadas) {
+          <p class="aviso-info">
+            La API aún no envía el campo «estadoRegistro», por eso no se pueden marcar las reservas eliminadas.
+          </p>
+        }
+        <app-reservas-tabla [datos]="historico"></app-reservas-tabla>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Por estado">
+      @if (cargandoGrupos) { <mat-progress-bar mode="indeterminate"></mat-progress-bar> }
+      <div class="contenido-tab">
+        <mat-accordion multi>
+          @for (g of grupos; track g.clave) {
+            <mat-expansion-panel [expanded]="g.reservas.length > 0">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="chip" [ngClass]="'chip-' + g.clave">{{ g.etiqueta }}</span>
+                </mat-panel-title>
+                <mat-panel-description>{{ g.reservas.length }} reservas</mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-reservas-tabla [datos]="g.reservas"></app-reservas-tabla>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
