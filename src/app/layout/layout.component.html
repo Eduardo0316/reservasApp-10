@@ -10,10 +10,10 @@
     <mat-nav-list>
       <ng-container *ngFor="let item of menuItems">
         <a mat-list-item
-           *ngIf="item.label !== 'Usuarios' || isAdmin"
-           [routerLink]="item.disponible ? item.route : null"
-           routerLinkActive="activo"
-           [class.deshabilitado]="!item.disponible">
+          *ngIf="item.label !== 'Usuarios' || isAdmin"
+          [routerLink]="item.disponible ? item.route : null"
+          routerLinkActive="activo"
+          [class.deshabilitado]="!item.disponible">
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.label }}</span>
           <span class="pronto" *ngIf="!item.disponible">Próximamente</span>
