@@ -44,13 +44,17 @@
       <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
         <td mat-cell *matCellDef="let h" class="col-acciones">
-          <button mat-icon-button matTooltip="Editar" (click)="abrirFormulario(h)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          @if (permisos.esAdmin) {
-            <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(h)">
-              <mat-icon>delete</mat-icon>
+          @if (h.conReservaActiva) {
+            <mat-icon style="opacity:.5" matTooltip="Tiene una reserva activa: no se puede editar ni eliminar">lock</mat-icon>
+          } @else {
+            <button mat-icon-button matTooltip="Editar" (click)="abrirFormulario(h)">
+              <mat-icon>edit</mat-icon>
             </button>
+            @if (permisos.esAdmin) {
+              <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(h)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
           }
         </td>
       </ng-container>

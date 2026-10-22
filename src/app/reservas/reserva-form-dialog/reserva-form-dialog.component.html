@@ -47,13 +47,17 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Fecha de entrada</mat-label>
-        <input matInput type="date" formControlName="fechaEntrada">
+        <input matInput [matDatepicker]="pickerEntrada" formControlName="fechaEntrada" placeholder="dd/mm/aaaa">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEntrada"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEntrada></mat-datepicker>
         <mat-error>{{ err('fechaEntrada') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Fecha de salida</mat-label>
-        <input matInput type="date" formControlName="fechaSalida">
+        <input matInput [matDatepicker]="pickerSalida" formControlName="fechaSalida" placeholder="dd/mm/aaaa">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerSalida"></mat-datepicker-toggle>
+        <mat-datepicker #pickerSalida></mat-datepicker>
         <mat-error>{{ err('fechaSalida') }}</mat-error>
       </mat-form-field>
 

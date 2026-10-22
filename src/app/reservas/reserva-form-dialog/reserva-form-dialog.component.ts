@@ -15,6 +15,7 @@ import { NotificacionService } from '../../shared/services/notificacion.service'
 import { aplicarErroresAlFormulario } from '../../shared/utils/http-error';
 import { mensajeError } from '../../shared/utils/form-errors';
 import { enteroMayorQueCero, fechasOrdenadas } from '../../shared/utils/validadores';
+import { aIso, desdeIso } from '../../shared/utils/fechas';
 
 /** Un solo diálogo para crear (data = null) y para editar fechas (data = reserva). */
 @Component({
@@ -53,8 +54,8 @@ export class ReservaFormDialogComponent implements OnInit {
     this.form = this.editando
       ? this.fb.group(
           {
-            fechaEntrada: [data!.fechaEntrada, Validators.required],
-            fechaSalida:  [data!.fechaSalida, Validators.required],
+            fechaEntrada: [desdeIso(data!.fechaEntrada), Validators.required],
+            fechaSalida:  [desdeIso(data!.fechaSalida), Validators.required],
           },
           { validators: fechasOrdenadas },
         )
@@ -62,8 +63,8 @@ export class ReservaFormDialogComponent implements OnInit {
           {
             idHuesped:      [null, Validators.required],
             idHabitacion:   [null, Validators.required],
-            fechaEntrada:   ['', Validators.required],
-            fechaSalida:    ['', Validators.required],
+            fechaEntrada:   [null, Validators.required],
+            fechaSalida:    [null, Validators.required],
             numeroPersonas: [1, [Validators.required, enteroMayorQueCero]],
           },
           { validators: fechasOrdenadas },
@@ -124,12 +125,12 @@ export class ReservaFormDialogComponent implements OnInit {
     this.guardando = true;
 
     const peticion$ = this.editando
-      ? this.reservas.actualizar(this.data!.id, { fechaEntrada: v.fechaEntrada, fechaSalida: v.fechaSalida })
+      ? this.reservas.actualizar(this.data!.id, { fechaEntrada: aIso(v.fechaEntrada), fechaSalida: aIso(v.fechaSalida) })
       : this.reservas.crear({
           idHuesped: Number(v.idHuesped),
           idHabitacion: Number(v.idHabitacion),
-          fechaEntrada: v.fechaEntrada,
-          fechaSalida: v.fechaSalida,
+          fechaEntrada: aIso(v.fechaEntrada),
+          fechaSalida: aIso(v.fechaSalida),
           numeroPersonas: Number(v.numeroPersonas),
           // TODO: el DTO del backend exige codigoReserva aunque no está en los requerimientos.
           // Cuando lo quiten del backend, borra esta línea.

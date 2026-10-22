@@ -6,6 +6,7 @@ export function mensajeError(c: AbstractControl | null): string {
   const e = c.errors;
   if (e['servidor']) return e['servidor'];
   if (e['required']) return 'Este campo es obligatorio';
+  if (e['matDatepickerParse']) return 'Fecha inválida. Usa el formato dd/mm/aaaa';
   if (e['longitudTrim']) return `Debe tener entre ${e['longitudTrim'].min} y ${e['longitudTrim'].max} caracteres`;
   if (e['email']) return 'Ingresa un correo válido';
   if (e['maxlength']) return `Máximo ${e['maxlength'].requiredLength} caracteres`;

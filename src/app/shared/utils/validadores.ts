@@ -13,7 +13,7 @@ export function longitudTrim(min: number, max: number): ValidatorFn {
 export const telefono10: ValidatorFn = (c) => {
   const v = (c.value ?? '').toString();
   if (!v) return null;
-  return /^\s*\d{10}\s*$/.test(v) ? null : { telefono: true };
+  return /^\d{10}$/.test(v) ? null : { telefono: true };
 };
 
 export const enteroMayorQueCero: ValidatorFn = (c) => {
@@ -32,6 +32,6 @@ export const mayorQueCero: ValidatorFn = (c) => {
 /** fechaEntrada < fechaSalida (usa getRawValue para funcionar aunque un campo esté deshabilitado). */
 export const fechasOrdenadas: ValidatorFn = (g: AbstractControl): ValidationErrors | null => {
   const { fechaEntrada, fechaSalida } = (g as FormGroup).getRawValue();
-  if (!fechaEntrada || !fechaSalida) return null;
-  return fechaEntrada < fechaSalida ? null : { fechasOrden: true }; // yyyy-MM-dd compara bien como texto
+  if (!(fechaEntrada instanceof Date) || !(fechaSalida instanceof Date)) return null;
+  return fechaEntrada.getTime() < fechaSalida.getTime() ? null : { fechasOrden: true };
 };

@@ -1,12 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Reserva } from '../../shared/models/reserva.model';
-import { EstadoReserva, claveEstadoReserva, etiquetaEstadoReserva, etiquetaTipoHabitacion } from '../../shared/models/catalogos';
+import {
+  EstadoRegistro, EstadoReserva, claveEstadoRegistro, claveEstadoReserva,
+  etiquetaEstadoReserva, etiquetaTipoHabitacion,
+} from '../../shared/models/catalogos';
 
 type FilaReporte = Reserva & {
   estadoClave: EstadoReserva | null;
   estadoEtiqueta: string;
   tipoHabitacion: string;
+  registroClave: EstadoRegistro | null;
   eliminada: boolean;
 };
 
@@ -31,7 +35,7 @@ type FilaReporte = Reserva & {
         </ng-container>
         <ng-container matColumnDef="fechas">
           <th mat-header-cell *matHeaderCellDef>Estancia</th>
-          <td mat-cell *matCellDef="let r">{{ r.fechaEntrada }} → {{ r.fechaSalida }}</td>
+          <td mat-cell *matCellDef="let r">{{ r.fechaEntrada | date:'dd/MM/yyyy' }} → {{ r.fechaSalida | date:'dd/MM/yyyy' }}</td>
         </ng-container>
         <ng-container matColumnDef="personas">
           <th mat-header-cell *matHeaderCellDef>Personas</th>
@@ -50,8 +54,8 @@ type FilaReporte = Reserva & {
         <ng-container matColumnDef="registro">
           <th mat-header-cell *matHeaderCellDef>Registro</th>
           <td mat-cell *matCellDef="let r">
-            @if (r.estadoRegistro) {
-              <span class="chip" [ngClass]="r.eliminada ? 'chip-ELIMINADO' : 'chip-ACTIVO'">
+            @if (r.registroClave) {
+              <span class="chip" [ngClass]="'chip-' + r.registroClave">
                 {{ r.eliminada ? 'Eliminada' : 'Activa' }}
               </span>
             } @else { — }
@@ -74,12 +78,14 @@ export class ReservasTablaComponent {
   @Input() set datos(lista: Reserva[] | null) {
     this.fuente.data = (lista ?? []).map((r) => {
       const estadoClave = claveEstadoReserva(r.estadoReserva);
+      const registroClave = claveEstadoRegistro(r.estadoRegistro);
       return {
         ...r,
         estadoClave,
         estadoEtiqueta: etiquetaEstadoReserva(estadoClave, r.estadoReserva),
         tipoHabitacion: etiquetaTipoHabitacion(r.habitacion?.tipo),
-        eliminada: (r.estadoRegistro ?? '').toUpperCase().startsWith('ELIMINAD'),
+        registroClave,
+        eliminada: registroClave === 'ELIMINADO',
       };
     });
   }

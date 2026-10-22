@@ -8,6 +8,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { MaterialModule } from './material/material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { PROVEEDORES_FECHAS } from './shared/utils/fechas';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    PROVEEDORES_FECHAS
   ],
   bootstrap: [AppComponent]
 })

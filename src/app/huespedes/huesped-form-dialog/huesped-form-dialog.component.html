@@ -11,25 +11,26 @@
     <div class="form-grid">
       <mat-form-field appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" autocomplete="off">
+        <input matInput formControlName="nombre" autocomplete="off" maxlength="50">
         <mat-error>{{ err('nombre') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Apellido</mat-label>
-        <input matInput formControlName="apellido" autocomplete="off">
+        <input matInput formControlName="apellido" autocomplete="off" maxlength="50">
         <mat-error>{{ err('apellido') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Correo electrónico</mat-label>
-        <input matInput type="email" formControlName="email" autocomplete="off">
+        <input matInput type="email" formControlName="email" autocomplete="off" maxlength="150">
         <mat-error>{{ err('email') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Teléfono</mat-label>
-        <input matInput formControlName="telefono" inputmode="numeric" placeholder="10 dígitos">
+        <input matInput formControlName="telefono" inputmode="numeric" placeholder="10 dígitos" maxlength="10" (input)="soloDigitos($event)">
+        <mat-hint align="end">{{ form.get('telefono')?.value?.length || 0 }}/10</mat-hint>
         <mat-error>{{ err('telefono') }}</mat-error>
       </mat-form-field>
 
@@ -45,14 +46,14 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Número de documento</mat-label>
-        <input matInput formControlName="numeroDocumento" autocomplete="off">
+        <input matInput formControlName="numeroDocumento" autocomplete="off" maxlength="20">
         <mat-hint>8 a 20 caracteres</mat-hint>
         <mat-error>{{ err('numeroDocumento') }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="ancho-completo">
         <mat-label>Nacionalidad</mat-label>
-        <input matInput formControlName="nacionalidad" autocomplete="off">
+        <input matInput formControlName="nacionalidad" autocomplete="off" maxlength="50">
         <mat-error>{{ err('nacionalidad') }}</mat-error>
       </mat-form-field>
     </div>

@@ -31,11 +31,6 @@ html, body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* ============================================================
-   Estilos compartidos de las pantallas nuevas.
-   Agrégalo a src/styles.scss con:  @use './styles-paginas';
-   (o pega su contenido al final de styles.scss)
-   ============================================================ */
 
 .pagina { max-width: 1200px; margin: 0 auto; padding: 8px 0 32px; }
 
@@ -65,7 +60,7 @@ html, body {
   margin: 0 0 12px; padding: 10px 12px; border-radius: 8px; font-size: .88rem;
   background: rgba(33, 150, 243, .10); border-left: 3px solid #2196f3;
 }
-.error-formulario { color: #b3261e; font-size: .85rem; margin: 0 0 8px; }
+.error-formulario { color: #dcd7d7; font-size: .85rem; margin: 0 0 8px; }
 .resumen-reserva {
   display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 12px; font-size: .92rem;
 }
@@ -82,7 +77,7 @@ html, body {
 .chip-LIMPIEZA                                    { background: #e0f7fa; color: #006064; }
 .chip-MANTENIMIENTO                               { background: #f3e5f5; color: #6a1b9a; }
 .chip-FINALIZADA                                  { background: #e8f5e9; color: #1b5e20; }
-.chip-CANCELADA, .chip-ELIMINADO                  { background: #ffebee; color: #b71c1c; }
+.chip-CANCELADA, .chip-ELIMINADO                  { background: #ffebee; color: #ca1616; }
 
 /* Snackbar de error */
-.snack-error { --mdc-snackbar-container-color: #b3261e; --mat-snack-bar-button-color: #fff; }
+.snack-error { --mdc-snackbar-container-color: #eee7e7; --mat-snack-bar-button-color: #130488; }

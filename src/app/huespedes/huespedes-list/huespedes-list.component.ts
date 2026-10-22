@@ -7,6 +7,15 @@ import { NotificacionService } from '../../shared/services/notificacion.service'
 import { PermisosService } from '../../shared/services/permisos.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { HuespedFormDialogComponent } from '../huesped-form-dialog/huesped-form-dialog.component';
+import { catchError, forkJoin, of } from 'rxjs';
+import { ReservaService } from '../../reservas/reserva.service';
+import { claveEstadoReserva, normalizarTexto } from '../../shared/models/catalogos';
+
+export type HuespedVista = Huesped & { conReservaActiva: boolean };
+
+/** Identifica a un huésped por tipo + número de documento (único entre huéspedes activos). */
+const claveHuesped = (tipo?: string, numero?: string): string =>
+  `${normalizarTexto(tipo ?? '')}|${(numero ?? '').trim().toLowerCase()}`;
 
 @Component({
   selector: 'app-huespedes-list',
@@ -14,10 +23,11 @@ import { HuespedFormDialogComponent } from '../huesped-form-dialog/huesped-form-
   templateUrl: './huespedes-list.component.html',
 })
 export class HuespedesListComponent implements OnInit {
-  datos = new MatTableDataSource<Huesped>([]);
+  datos = new MatTableDataSource<HuespedVista>([]);
   cargando = true;
 
   constructor(
+    private reservaService: ReservaService,
     private service: HuespedService,
     private dialog: MatDialog,
     private notif: NotificacionService,
@@ -35,8 +45,23 @@ export class HuespedesListComponent implements OnInit {
 
   cargar(): void {
     this.cargando = true;
-    this.service.listar().subscribe({
-      next: (lista) => { this.datos.data = lista; this.cargando = false; },
+    forkJoin({
+      huespedes: this.service.listar(),
+      // Si esta consulta falla no bloqueamos la pantalla: el backend igual responde 409.
+      reservas: this.reservaService.listar().pipe(catchError(() => of(null))),
+    }).subscribe({
+      next: ({ huespedes, reservas }) => {
+        const conReserva = new Set(
+          (reservas ?? [])
+            .filter(r => ['CONFIRMADA', 'EN_CURSO'].includes(claveEstadoReserva(r.estadoReserva) ?? ''))
+            .map(r => claveHuesped(r.huesped?.tipoDocumento, r.huesped?.numeroDocumento)),
+        );
+        this.datos.data = huespedes.map(h => ({
+          ...h,
+          conReservaActiva: conReserva.has(claveHuesped(h.tipoDocumento, h.numeroDocumento)),
+        }));
+        this.cargando = false;
+      },
       error: (e) => { this.cargando = false; this.notif.error(e); },
     });
   }

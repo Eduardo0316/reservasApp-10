@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ThemeService } from '../core/services/theme.service';
 import { AuthService } from '../core/services/auth.service';
 import { ROLES } from '../core/models/usuario.model';
+import { PermisosService } from '../shared/services/permisos.service';
 
 interface MenuItem {
   label: string;
@@ -33,7 +34,8 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     public themeService: ThemeService,
-    private authService: AuthService
+    private authService: AuthService,
+    public permisos: PermisosService
   ) {}
 
   ngOnInit(): void {

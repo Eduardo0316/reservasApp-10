@@ -112,6 +112,13 @@ export function accionesReserva(estado: EstadoReserva | null) {
   };
 }
 
+export type EstadoRegistro = 'ACTIVO' | 'ELIMINADO';
+
+export function claveEstadoRegistro(texto?: string | null): EstadoRegistro | null {
+  if (!texto) return null;
+  return normalizar(texto).startsWith('eliminad') ? 'ELIMINADO' : 'ACTIVO';
+}
+
 // ───────────── Tipo de documento ─────────────
 /** El backend recibe y devuelve estos textos tal cual (INE, Licencia, Pasaporte). */
 export const TIPOS_DOCUMENTO = ['INE', 'Licencia', 'Pasaporte'];

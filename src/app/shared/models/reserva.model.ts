@@ -28,8 +28,7 @@ export interface Reserva {
   precioTotal: number;
   /** Descripción del estado (ver catalogos.ts) */
   estadoReserva: string;
-  /** Solo llega si el backend lo expone; necesario para marcar ELIMINADAS en reportes. */
-  estadoRegistro?: string;
+  estadoRegistro: string;
 }
 
 export interface ReservaCrearRequest {

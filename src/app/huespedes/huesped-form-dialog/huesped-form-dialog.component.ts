@@ -44,6 +44,12 @@ export class HuespedFormDialogComponent {
     });
   }
 
+  soloDigitos(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const limpio = input.value.replace(/\D/g, '').slice(0, 10);
+    if (input.value !== limpio) this.form.get('telefono')!.setValue(limpio);
+  }
+  
   err(campo: string): string {
     return mensajeError(this.form.get(campo));
   }
@@ -58,7 +64,7 @@ export class HuespedFormDialogComponent {
       nombre: v.nombre.trim(),
       apellido: v.apellido.trim(),
       email: v.email.trim().toLowerCase(),
-      telefono: v.telefono.trim(),
+      telefono: v.telefono,
       tipoDocumento: v.tipoDocumento,
       numeroDocumento: v.numeroDocumento.trim(),
       nacionalidad: v.nacionalidad.trim(),

@@ -16,11 +16,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 const MATERIAL = [
   MatTableModule, MatButtonModule, MatIconModule, MatCardModule, MatFormFieldModule, MatInputModule,
   MatSelectModule, MatDialogModule, MatSnackBarModule, MatMenuModule, MatTooltipModule,
-  MatProgressBarModule, MatTabsModule, MatExpansionModule,
+  MatProgressBarModule, MatTabsModule, MatExpansionModule, MatDatepickerModule 
 ];
 
 /** Módulo compartido por huéspedes, habitaciones, reservas y reportes. */
